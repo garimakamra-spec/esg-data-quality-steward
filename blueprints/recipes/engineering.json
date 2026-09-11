@@ -1,0 +1,35 @@
+{
+  "recipeKey": "engineering-starter",
+  "version": "1.0.0",
+  "targetRole": "DEVELOPER",
+  "name": "Engineering Team Starter Kit",
+  "assets": {
+    "starterBoards": [
+      {
+        "name": "Sprint Backlog",
+        "columns": ["To Do", "In Progress", "Code Review", "Done"],
+        "sampleCards": [
+          { "title": "Setup local development environment", "label": "Setup", "status": "In Progress" },
+          { "title": "Review team coding guidelines & conventions", "label": "Documentation", "status": "To Do" },
+          { "title": "Deploy first sandbox change", "label": "Verification", "status": "To Do" }
+        ]
+      }
+    ],
+    "pinnedResources": [
+      { "title": "Engineering Architecture Standards", "url": "/docs/architecture", "category": "Documentation" },
+      { "title": "CI/CD Pipeline & Build Monitor", "url": "/pipelines/main", "category": "DevOps" },
+      { "title": "Local Dev Sandbox Guide", "url": "/docs/local-setup", "category": "Guides" }
+    ],
+    "sampleQueries": [
+      { "name": "My Open Team Issues", "query": "status:open assign:me" },
+      { "name": "Needs Code Review", "query": "status:review label:backend" }
+    ]
+  },
+  "microRunbook": {
+    "steps": [
+      { "id": "step_connect_git", "label": "Connect Git repository & SSH keys", "actionRoute": "/settings/git" },
+      { "id": "step_first_board", "label": "Inspect the Sprint Backlog starter board", "actionRoute": "/boards/sprint" },
+      { "id": "step_sample_query", "label": "Execute your first saved issue query", "actionRoute": "/issues?q=starter" }
+    ]
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "recipeKey": "general-starter",
+  "version": "1.0.0",
+  "targetRole": "MEMBER",
+  "name": "General Workspace Starter Kit",
+  "assets": {
+    "starterBoards": [
+      {
+        "name": "Team Welcome & Knowledge Hub",
+        "columns": ["Getting Started", "Shared Resources", "Team Announcements"],
+        "sampleCards": [
+          { "title": "Welcome to the enterprise organization!", "label": "Welcome", "status": "Getting Started" },
+          { "title": "Connect with your department manager", "label": "Directory", "status": "Getting Started" }
+        ]
+      }
+    ],
+    "pinnedResources": [
+      { "title": "Company Handbook & Policies", "url": "/docs/handbook", "category": "General" },
+      { "title": "IT Helpdesk & Directory FAQ", "url": "/docs/it-faq", "category": "Support" }
+    ],
+    "sampleQueries": [
+      { "name": "Company-wide Announcements", "query": "label:announcement" }
+    ]
+  },
+  "microRunbook": {
+    "steps": [
+      { "id": "step_view_handbook", "label": "Explore company handbook & workspace guide", "actionRoute": "/docs/handbook" },
+      { "id": "step_confirm_profile", "label": "Confirm your profile & notification preferences", "actionRoute": "/settings/profile" },
+      { "id": "step_join_channel", "label": "Join your team's discussion channel", "actionRoute": "/channels/general" }
+    ]
+  }
+}

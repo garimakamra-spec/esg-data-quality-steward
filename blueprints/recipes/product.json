@@ -1,0 +1,32 @@
+{
+  "recipeKey": "product-starter",
+  "version": "1.0.0",
+  "targetRole": "PRODUCT_MANAGER",
+  "name": "Product Management Starter Kit",
+  "assets": {
+    "starterBoards": [
+      {
+        "name": "Quarterly Roadmap & Feature Initiatives",
+        "columns": ["Problem Validation", "Spec Drafting", "In Design", "Ready for Dev"],
+        "sampleCards": [
+          { "title": "Customer discovery interviews for enterprise telemetry", "label": "Research", "status": "Problem Validation" },
+          { "title": "Draft PRD for automated role-adaptive onboarding", "label": "PRD", "status": "Spec Drafting" }
+        ]
+      }
+    ],
+    "pinnedResources": [
+      { "title": "Product Vision & Strategy Deck", "url": "/docs/strategy", "category": "Strategy" },
+      { "title": "Customer Research Repository", "url": "/docs/research", "category": "Insights" }
+    ],
+    "sampleQueries": [
+      { "name": "Features in Discovery", "query": "type:feature stage:validation" }
+    ]
+  },
+  "microRunbook": {
+    "steps": [
+      { "id": "step_review_roadmap", "label": "Review the Quarterly Product Roadmap", "actionRoute": "/roadmap" },
+      { "id": "step_create_spec", "label": "Draft your first PRD template", "actionRoute": "/specs/new" },
+      { "id": "step_invite_eng", "label": "Tag Engineering lead on spec review", "actionRoute": "/specs/review" }
+    ]
+  }
+}

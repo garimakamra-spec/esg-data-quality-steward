@@ -1,0 +1,336 @@
+/* src/web/components/onboarding/OnboardingBanner.css */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  
+  --bg-canvas: #090d16;
+  --bg-surface: rgba(18, 26, 44, 0.75);
+  --bg-card: rgba(26, 36, 62, 0.6);
+  --bg-card-hover: rgba(36, 50, 85, 0.8);
+  
+  --primary-glow: #6366f1;
+  --primary-accent: #818cf8;
+  --primary-gradient: linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #a855f7 100%);
+  --success-accent: #10b981;
+  --success-glow: rgba(16, 185, 129, 0.25);
+  
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-active: rgba(99, 102, 241, 0.35);
+  
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  
+  --radius-lg: 16px;
+  --radius-md: 10px;
+  --radius-sm: 6px;
+  
+  --transition-smooth: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-canvas);
+  color: var(--text-primary);
+  line-height: 1.5;
+  padding: 24px;
+}
+
+/* Micro-Runbook Banner Container */
+.onboarding-banner {
+  position: relative;
+  max-width: 1100px;
+  margin: 0 auto 32px auto;
+  border-radius: var(--radius-lg);
+  background: var(--bg-surface);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-subtle);
+  box-shadow: 0 12px 40px -10px rgba(0, 0, 0, 0.5),
+              0 0 0 1px rgba(255, 255, 255, 0.05),
+              0 0 24px -4px rgba(99, 102, 241, 0.15);
+  overflow: hidden;
+  transition: var(--transition-smooth);
+}
+
+.onboarding-banner.dismissed {
+  opacity: 0;
+  transform: translateY(-12px);
+  pointer-events: none;
+  height: 0;
+  margin-bottom: 0;
+  padding: 0;
+}
+
+.banner-glow-strip {
+  height: 3px;
+  width: 100%;
+  background: var(--primary-gradient);
+  box-shadow: 0 0 12px var(--primary-glow);
+}
+
+.banner-content {
+  padding: 20px 24px;
+}
+
+/* Banner Header */
+.banner-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.banner-title-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.role-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  background: rgba(99, 102, 241, 0.15);
+  border: 1px solid var(--border-active);
+  color: var(--primary-accent);
+}
+
+.role-badge::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--primary-accent);
+  box-shadow: 0 0 8px var(--primary-accent);
+  animation: pulse-dot 2s infinite;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.8); }
+}
+
+.banner-heading {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.banner-subtitle {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.banner-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-icon {
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--text-muted);
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.btn-icon:hover {
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.06);
+  border-color: var(--border-subtle);
+}
+
+/* Progress Section */
+.progress-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.progress-bar-bg {
+  flex: 1;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 9999px;
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: var(--primary-gradient);
+  border-radius: 9999px;
+  transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 0 10px rgba(129, 140, 248, 0.5);
+}
+
+.progress-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  white-space: nowrap;
+}
+
+/* Steps Grid */
+.steps-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 12px;
+}
+
+.step-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: var(--radius-md);
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  transition: var(--transition-smooth);
+  cursor: pointer;
+  position: relative;
+  text-decoration: none;
+}
+
+.step-card:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--border-active);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px -4px rgba(0, 0, 0, 0.3);
+}
+
+.step-card.completed {
+  background: rgba(16, 185, 129, 0.08);
+  border-color: rgba(16, 185, 129, 0.25);
+}
+
+.step-checkbox {
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  border: 2px solid var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 1px;
+  transition: var(--transition-smooth);
+}
+
+.step-card.completed .step-checkbox {
+  background: var(--success-accent);
+  border-color: var(--success-accent);
+  box-shadow: 0 0 8px var(--success-glow);
+}
+
+.step-checkbox-icon {
+  display: none;
+  color: #fff;
+  font-size: 14px;
+}
+
+.step-card.completed .step-checkbox-icon {
+  display: block;
+}
+
+.step-body {
+  flex: 1;
+}
+
+.step-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 2px;
+  transition: var(--transition-smooth);
+}
+
+.step-card.completed .step-title {
+  color: var(--text-secondary);
+  text-decoration: line-through;
+}
+
+.step-meta {
+  font-size: 0.75rem;
+  color: var(--primary-accent);
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.step-card.completed .step-meta {
+  color: var(--success-accent);
+}
+
+/* Workspace Preview Container (Demo Context) */
+.workspace-mock {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 24px;
+  border-radius: var(--radius-lg);
+  background: rgba(18, 26, 44, 0.3);
+  border: 1px solid var(--border-subtle);
+}
+
+.mock-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.mock-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.mock-cards-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.mock-card {
+  background: rgba(26, 36, 62, 0.4);
+  padding: 16px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+}
+
+.mock-card h4 {
+  font-size: 0.95rem;
+  margin-bottom: 8px;
+  color: var(--text-primary);
+}
+
+.mock-card p {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
