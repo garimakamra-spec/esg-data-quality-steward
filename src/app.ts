@@ -9,15 +9,43 @@ import { OnboardingController } from './controllers/onboarding-controller.js';
 import { createTenantAuthMiddleware } from './middleware/tenant-auth.js';
 import * as path from 'path';
 
+import { AggregatorDataStore } from './aggregator/data-store.js';
+import { AuditLedger } from './agent/audit-ledger.js';
+import { MultiAgentOrchestrator } from './agent/orchestrator.js';
+import { createEsgRoutes } from './api/routes.js';
+
 export function createApp(store: InMemoryStore = globalStore): {
   app: Express;
   store: InMemoryStore;
   lifecycleService: AccountLifecycleService;
   queue: ProvisioningQueue;
   seeder: BlueprintSeeder;
+  esgOrchestrator: MultiAgentOrchestrator;
+  aggregatorStore: AggregatorDataStore;
+  auditLedger: AuditLedger;
 } {
   const app = express();
   app.use(express.json({ type: ['application/json', 'application/scim+json'] }));
+
+  // Initialize ESG Data Quality Steward Subsystem
+  const aggregatorStore = new AggregatorDataStore();
+  const auditLedger = new AuditLedger();
+  const esgOrchestrator = new MultiAgentOrchestrator(aggregatorStore, auditLedger);
+
+  // Serve ESG Static Web Assets
+  const publicWebDir = path.resolve(process.cwd(), 'src', 'web', 'public');
+  app.use('/static/public', express.static(publicWebDir));
+
+  // Convenience root redirect to ESG Exception Review Console
+  app.get('/', (_req, res) => {
+    res.sendFile(path.resolve(publicWebDir, 'index.html'));
+  });
+  app.get('/console', (_req, res) => {
+    res.sendFile(path.resolve(publicWebDir, 'index.html'));
+  });
+
+  // Mount ESG Data Quality Steward API v2
+  app.use('/api/v2', createEsgRoutes(esgOrchestrator));
 
   const lifecycleService = new AccountLifecycleService(store);
   const queue = new ProvisioningQueue(lifecycleService);
@@ -26,7 +54,7 @@ export function createApp(store: InMemoryStore = globalStore): {
   const onboardingController = new OnboardingController(store, seeder);
   const tenantAuth = createTenantAuthMiddleware(store);
 
-  // Serve static UI assets
+  // Serve static legacy UI assets
   const webDir = path.resolve(process.cwd(), 'src', 'web');
   app.use('/static', express.static(webDir));
 
@@ -58,5 +86,5 @@ export function createApp(store: InMemoryStore = globalStore): {
 
   app.use('/api/v1/onboarding/runbook', onboardingRouter);
 
-  return { app, store, lifecycleService, queue, seeder };
+  return { app, store, lifecycleService, queue, seeder, esgOrchestrator, aggregatorStore, auditLedger };
 }

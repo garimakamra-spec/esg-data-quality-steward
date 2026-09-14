@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ESG Data Quality Steward AI Agent | Exception Review Console</title>
+  <meta name="description" content="Autonomous Multi-Agent System for ESG Data Quality, Utility Anomaly Triage, Continuous Audit Defensibility under CSRD and GHG Protocol">
+  <link rel="stylesheet" href="/static/public/styles.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌱</text></svg>">
+</head>
+<body>
+
+  <!-- App Header -->
+  <header class="app-header">
+    <div class="brand-section">
+      <div class="brand-logo">🌱</div>
+      <div class="brand-title-wrap">
+        <h1>ESG Data Quality Steward <span style="font-size: 11px; padding: 2px 8px; background: rgba(16,185,129,0.2); color: #10b981; border-radius: 999px; font-family: var(--font-mono);">AI-AGENT v2.4</span></h1>
+        <p>Enterprise Carbon & Energy Accounting Assurance</p>
+      </div>
+    </div>
+
+    <div class="header-status-group">
+      <nav class="nav-tabs" aria-label="Main Navigation">
+        <button class="nav-tab-btn active" id="tabReview" onclick="switchTab('review')">
+          <span>⚡</span> Exception Review Console
+        </button>
+        <button class="nav-tab-btn" id="tabSimulator" onclick="switchTab('simulator')">
+          <span>🧪</span> Anomaly Simulator
+        </button>
+        <button class="nav-tab-btn" id="tabLedger" onclick="switchTab('ledger')">
+          <span>⛓️</span> Audit Ledger & CSRD
+        </button>
+      </nav>
+
+      <div class="user-badge">
+        <div class="status-dot-pulse"></div>
+        <div class="user-text-wrap">
+          <span class="user-title" id="currentUserDisplay">user_esg_lead_04@company.com</span>
+          <span class="user-role">Logged in: ESG Lead & Assurance Officer</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- KPI Ribbon -->
+  <section class="kpi-ribbon" aria-label="System Performance Metrics">
+    <div class="kpi-card">
+      <div class="kpi-header">
+        <span class="kpi-title">Straight-Through Processing (STP)</span>
+        <span class="kpi-icon">🎯</span>
+      </div>
+      <div class="kpi-value-row">
+        <span class="kpi-value" id="kpiStpRate">--%</span>
+        <span class="kpi-badge" id="kpiStpBadge">Target: ≥ 70%</span>
+      </div>
+      <div class="kpi-subtext" id="kpiStpSub">Autonomous API resolution without manual triage</div>
+    </div>
+
+    <div class="kpi-card blue">
+      <div class="kpi-header">
+        <span class="kpi-title">Average Triage Turnaround</span>
+        <span class="kpi-icon">⏱️</span>
+      </div>
+      <div class="kpi-value-row">
+        <span class="kpi-value" id="kpiTurnaround">< 15 mins</span>
+        <span class="kpi-badge">vs 9.5 Days Baseline</span>
+      </div>
+      <div class="kpi-subtext">99.8% reduction in exception cycle time</div>
+    </div>
+
+    <div class="kpi-card purple">
+      <div class="kpi-header">
+        <span class="kpi-title">Audit Defensibility Score</span>
+        <span class="kpi-icon">🛡️</span>
+      </div>
+      <div class="kpi-value-row">
+        <span class="kpi-value" id="kpiDefensibility">100%</span>
+        <span class="kpi-badge">CSRD & GHG Ready</span>
+      </div>
+      <div class="kpi-subtext">Cryptographically chained tamper-evident evidence</div>
+    </div>
+
+    <div class="kpi-card warning">
+      <div class="kpi-header">
+        <span class="kpi-title">Audited Carbon Delta</span>
+        <span class="kpi-icon">🌍</span>
+      </div>
+      <div class="kpi-value-row">
+        <span class="kpi-value" id="kpiCarbonCorrected">0.0 tCO2e</span>
+        <span class="kpi-badge">Scope 1 & 2 Restatement Avoidance</span>
+      </div>
+      <div class="kpi-subtext" id="kpiCasesCounts">Total Cases: 0 | Escalated: 0</div>
+    </div>
+  </section>
+
+  <!-- Main Container Views -->
+  <main class="main-container">
+    
+    <!-- VIEW 1: Exception Review Console -->
+    <div class="view-panel active" id="viewReview">
+      <div class="workspace-layout">
+        
+        <!-- Left: Queue Sidebar -->
+        <aside class="queue-panel">
+          <div class="queue-header">
+            <div class="queue-title-row">
+              <h2>Exception Queue <span class="badge-count" id="queueCount">0</span></h2>
+              <button class="btn btn-secondary" style="padding: 4px 8px; font-size: 11px;" onclick="fetchCases()">↻ Refresh</button>
+            </div>
+            
+            <!-- Quick Filter Chips -->
+            <div class="filter-bar">
+              <span class="filter-chip active" data-filter="status" data-val="ALL" onclick="setFilter('status', 'ALL', this)">All Status</span>
+              <span class="filter-chip" data-filter="status" data-val="ESCALATED" onclick="setFilter('status', 'ESCALATED', this)">⚠️ Pending (HITL)</span>
+              <span class="filter-chip" data-filter="status" data-val="AUTO_REMEDIATED" onclick="setFilter('status', 'AUTO_REMEDIATED', this)">⚡ Auto-Remediated</span>
+              <span class="filter-chip" data-filter="status" data-val="HUMAN_APPROVED" onclick="setFilter('status', 'HUMAN_APPROVED', this)">✅ Approved</span>
+            </div>
+            <div class="filter-bar" style="margin-top: 4px;">
+              <span class="filter-chip active" data-filter="materiality" data-val="ALL" onclick="setFilter('materiality', 'ALL', this)">All Materiality</span>
+              <span class="filter-chip" data-filter="materiality" data-val="HIGH" onclick="setFilter('materiality', 'HIGH', this)">High Stakes (≥50t)</span>
+            </div>
+          </div>
+
+          <!-- Queue Cases List -->
+          <div class="queue-list" id="queueList">
+            <div style="padding: 24px; text-align: center; color: var(--text-muted);">Loading anomaly queue...</div>
+          </div>
+        </aside>
+
+        <!-- Right: Active Case Detail Studio -->
+        <section class="detail-panel" id="detailPanel">
+          <div style="padding: 60px; text-align: center; color: var(--text-muted);">
+            Select a case from the exception queue to begin triage review.
+          </div>
+        </section>
+
+      </div>
+    </div>
+
+    <!-- VIEW 2: Anomaly Simulator & Ingestion Workbench -->
+    <div class="view-panel" id="viewSimulator">
+      <div style="margin-bottom: 24px;">
+        <h2 style="font-family: var(--font-display); font-size: 20px; font-weight: 700; color: #fff; margin-bottom: 6px;">
+          Multi-Agent Ingestion Simulator & Test Workbench
+        </h2>
+        <p style="color: var(--text-secondary); font-size: 13px;">
+          Inject real-world utility anomalies to test the StateGraph orchestrator, confidence gates, straight-through processing, and HITL escalations.
+        </p>
+      </div>
+
+      <!-- Simulator Presets Grid -->
+      <div class="sim-grid">
+        
+        <!-- Scenario 1 -->
+        <div class="sim-card">
+          <div>
+            <div class="sim-card-title">
+              <span>🏢</span> Case #2026-8942 (Page 8 Blueprint)
+            </div>
+            <p class="sim-desc" style="margin: 8px 0;">
+              Logistics Hub 4 Metro London: Observed 120,400 kWh (10x spike on 12,050 kWh baseline). Materiality: 62.4 tCO2e (&gt;50 tCO2e limit). High-confidence multiplier slip escalated for mandatory 1-click human sign-off.
+            </p>
+            <div class="sim-meta-tags">
+              <span class="sim-tag">Grid Electricity</span>
+              <span class="sim-tag" style="color: var(--amber-warning);">High Stakes ≥ 50 tCO2e</span>
+              <span class="sim-tag">Escalated to HITL</span>
+            </div>
+          </div>
+          <button class="btn btn-secondary" onclick="triggerSimulation('case_2026_8942')">
+            ▶ Ingest Scenario #1
+          </button>
+        </div>
+
+        <!-- Scenario 2 -->
+        <div class="sim-card">
+          <div>
+            <div class="sim-card-title">
+              <span>⚡</span> 70% STP Canonical Multiplier Error
+            </div>
+            <p class="sim-desc" style="margin: 8px 0;">
+              Southeast London Logistics: 48,000 kWh spike. Score = 0.952, Carbon impact = 7.4 tCO2e (&lt; 50t threshold). Automatically triggers straight-through API write-back and cryptographically hashes the audit entry.
+            </p>
+            <div class="sim-meta-tags">
+              <span class="sim-tag">Electricity</span>
+              <span class="sim-tag" style="color: var(--emerald-primary);">Low Stake (&lt; 50t)</span>
+              <span class="sim-tag">Autonomous STP Write-Back</span>
+            </div>
+          </div>
+          <button class="btn btn-secondary" onclick="triggerSimulation('stp_multiplier')">
+            ▶ Ingest Scenario #2
+          </button>
+        </div>
+
+        <!-- Scenario 3 -->
+        <div class="sim-card">
+          <div>
+            <div class="sim-card-title">
+              <span>❄️</span> Peak Freeze Gas Flatline (Page 15/16)
+            </div>
+            <p class="sim-desc" style="margin: 8px 0;">
+              Midlands Distribution Hub: Gas meter flatlines at 0.00 m3 during freezing conditions (HDD=450). High materiality (140 tCO2e). Pre-computes 18,400 m3 synthetic fill and generates an on-site technician dispatch ticket.
+            </p>
+            <div class="sim-meta-tags">
+              <span class="sim-tag">Natural Gas</span>
+              <span class="sim-tag" style="color: var(--rose-danger);">140 tCO2e High Stake</span>
+              <span class="sim-tag">GHG Protocol Fill</span>
+            </div>
+          </div>
+          <button class="btn btn-secondary" onclick="triggerSimulation('gas_winter_freeze')">
+            ▶ Ingest Scenario #3
+          </button>
+        </div>
+
+        <!-- Scenario 4 -->
+        <div class="sim-card">
+          <div>
+            <div class="sim-card-title">
+              <span>🏦</span> EU Taxonomy Flagship Asset
+            </div>
+            <p class="sim-desc" style="margin: 8px 0;">
+              Frankfurt Taunus Tower: Flagship asset under EU Taxonomy-aligned Green Financing. Even with high diagnostic certainty, regulatory guardrails force mandatory external auditor sign-off.
+            </p>
+            <div class="sim-meta-tags">
+              <span class="sim-tag">EU Taxonomy Article 9</span>
+              <span class="sim-tag" style="color: var(--purple-reg);">Mandatory Human Gate</span>
+            </div>
+          </div>
+          <button class="btn btn-secondary" onclick="triggerSimulation('eu_taxonomy_flagship')">
+            ▶ Ingest Scenario #4
+          </button>
+        </div>
+
+        <!-- Scenario 5 -->
+        <div class="sim-card">
+          <div>
+            <div class="sim-card-title">
+              <span>🔄</span> Meter Rollover / Swap Anomaly
+            </div>
+            <p class="sim-desc" style="margin: 8px 0;">
+              Manhattan Center: Hardware register dropped to 0 without preceding load taper. Triggers physical meter check requirement before billing records can be certified.
+            </p>
+            <div class="sim-meta-tags">
+              <span class="sim-tag">Hardware Change</span>
+              <span class="sim-tag">Work Order Generation</span>
+            </div>
+          </div>
+          <button class="btn btn-secondary" onclick="triggerSimulation('meter_rollover')">
+            ▶ Ingest Scenario #5
+          </button>
+        </div>
+
+        <!-- Scenario 6 -->
+        <div class="sim-card">
+          <div>
+            <div class="sim-card-title">
+              <span>📉</span> Operational Residual Drift
+            </div>
+            <p class="sim-desc" style="margin: 8px 0;">
+              Commercial Office: 64% increase with no scalar match and normal degree days. Confidence score evaluates to 0.62 (&lt; 0.85). System halts autonomous actions and seeks facility confirmation.
+            </p>
+            <div class="sim-meta-tags">
+              <span class="sim-tag">Behavioral Shift</span>
+              <span class="sim-tag">Low Confidence (&lt; 0.85)</span>
+            </div>
+          </div>
+          <button class="btn btn-secondary" onclick="triggerSimulation('operational_drift')">
+            ▶ Ingest Scenario #6
+          </button>
+        </div>
+
+      </div>
+
+      <!-- Custom Injection Form -->
+      <div class="sim-card" style="margin-top: 10px;">
+        <div class="sim-card-title">
+          <span>🛠️</span> Custom Anomaly Injection Payload
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin-top: 12px;">
+          <div class="form-group">
+            <label class="form-label">Asset</label>
+            <select class="form-input" id="customAssetId">
+              <option value="GB-LON-LOG-004">Logistics Hub 4 - London (GB-LON-LOG-004)</option>
+              <option value="DE-FRK-OFF-001">Taunus Tower - Frankfurt (DE-FRK-OFF-001)</option>
+              <option value="GB-MID-LOG-002">Midlands Distribution Hub 2 (GB-MID-LOG-002)</option>
+              <option value="US-NYC-OFF-102">Hudson Green Center - NYC (US-NYC-OFF-102)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Meter ID</label>
+            <input class="form-input" id="customMeterId" value="ELEC-MAIN-01">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Observed Interval Reading</label>
+            <input class="form-input" id="customObservedVal" type="number" value="120400">
+          </div>
+        </div>
+        <div style="display: flex; justify-content: flex-end; margin-top: 10px;">
+          <button class="btn btn-primary-action" onclick="submitCustomSimulation()">
+            🚀 Ingest & Run Multi-Agent Orchestrator
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- VIEW 3: Immutable Audit Ledger & CSRD Verification Pack -->
+    <div class="view-panel" id="viewLedger">
+      <div class="ledger-view-card">
+        <div class="ledger-toolbar">
+          <div>
+            <h2 style="font-family: var(--font-display); font-size: 18px; font-weight: 700; color: #fff; margin-bottom: 4px;">
+              Immutable Audit Ledger & CSRD Compliance Store
+            </h2>
+            <p style="color: var(--text-secondary); font-size: 12px;">
+              Cryptographically chained decision history supporting limited & reasonable assurance under CSRD (ESRS E1) & GHG Protocol.
+            </p>
+          </div>
+
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <div class="integrity-badge" id="ledgerIntegrityBadge">
+              <span>🔒</span> SHA-256 HASH CHAIN: VERIFIED TAMPER-PROOF
+            </div>
+            <button class="btn btn-primary-action" onclick="exportAuditorPackage()">
+              📄 Export Auditor Verification Pack
+            </button>
+          </div>
+        </div>
+
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Timestamp (UTC)</th>
+                <th>Event / Asset ID</th>
+                <th>Meter</th>
+                <th>Observed</th>
+                <th>Remediated</th>
+                <th>Delta tCO2e</th>
+                <th>Execution Path</th>
+                <th>Approver</th>
+                <th>Block SHA-256 Hash</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="auditTableBody">
+              <tr>
+                <td colspan="10" style="text-align: center; color: var(--text-muted); padding: 30px;">
+                  No audit blocks committed yet. Approve a case or run autonomous STP to write records.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- MODALS -->
+
+  <!-- Modal: Edit Remediation -->
+  <div class="modal-overlay" id="editModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>Edit Remediation & Recalculate Emissions</h3>
+        <button class="modal-close-btn" onclick="closeModal('editModal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label">Case ID</label>
+          <input class="form-input" id="editModalCaseId" readonly>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Original Flagged Reading</label>
+          <input class="form-input" id="editModalObservedVal" readonly>
+        </div>
+        <div class="form-group">
+          <label class="form-label">New Corrected Reading</label>
+          <input class="form-input" id="editModalNewVal" type="number" step="0.01" oninput="recalculateEditModalPreview()">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Reviewer Notes & Justification</label>
+          <textarea class="form-input" id="editModalNotes" rows="3" placeholder="Enter auditor justification reason..."></textarea>
+        </div>
+        <div style="background: rgba(16,185,129,0.1); border: 1px solid var(--border-active); border-radius: var(--radius-sm); padding: 12px; margin-top: 10px;">
+          <div style="font-size: 11px; color: var(--emerald-primary); font-weight: 600;">PREVIEWED REVISION IMPACT:</div>
+          <div id="editModalImpactPreview" style="font-size: 13px; color: #fff; margin-top: 4px;">Recalculating...</div>
+        </div>
+      </div>
+      <div style="padding: 16px 24px; border-top: 1px solid var(--border-subtle); display: flex; justify-content: flex-end; gap: 10px;">
+        <button class="btn btn-secondary" onclick="closeModal('editModal')">Cancel</button>
+        <button class="btn btn-primary-action" onclick="submitEditRemediation()">Save & Execute Write-Back</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: JSON Block Inspector -->
+  <div class="modal-overlay" id="jsonModal">
+    <div class="modal-card" style="max-width: 780px;">
+      <div class="modal-header">
+        <h3 id="jsonModalTitle">Audit Block Schema (Section 5.2)</h3>
+        <button class="modal-close-btn" onclick="closeModal('jsonModal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <pre class="json-pre-block" id="jsonModalContent"></pre>
+      </div>
+      <div style="padding: 14px 24px; border-top: 1px solid var(--border-subtle); display: flex; justify-content: flex-end;">
+        <button class="btn btn-secondary" onclick="closeModal('jsonModal')">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Utility Dispute Package -->
+  <div class="modal-overlay" id="disputeModal">
+    <div class="modal-card" style="max-width: 760px;">
+      <div class="modal-header">
+        <h3>Formal Utility Billing Dispute Package</h3>
+        <button class="modal-close-btn" onclick="closeModal('disputeModal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div id="disputeSummaryBox" style="background: rgba(0,0,0,0.3); border: 1px solid var(--border-subtle); padding: 14px; border-radius: var(--radius-sm); margin-bottom: 14px;">
+          <!-- Injected via JS -->
+        </div>
+        <label class="form-label" style="margin-bottom: 6px;">Pre-Drafted Formal Inquiry Letter</label>
+        <pre class="json-pre-block" id="disputeLetterContent" style="white-space: pre-wrap; font-family: var(--font-mono); color: #cbd5e1;"></pre>
+      </div>
+      <div style="padding: 14px 24px; border-top: 1px solid var(--border-subtle); display: flex; justify-content: flex-end; gap: 10px;">
+        <button class="btn btn-secondary" onclick="copyDisputeLetter()">📋 Copy Letter</button>
+        <button class="btn btn-primary-action" onclick="closeModal('disputeModal')">Done</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Site Inspection Work Order -->
+  <div class="modal-overlay" id="inspectionModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>Field Inspection Dispatch Work Order</h3>
+        <button class="modal-close-btn" onclick="closeModal('inspectionModal')">&times;</button>
+      </div>
+      <div class="modal-body" id="inspectionModalBody">
+        <!-- Injected via JS -->
+      </div>
+      <div style="padding: 14px 24px; border-top: 1px solid var(--border-subtle); display: flex; justify-content: flex-end;">
+        <button class="btn btn-primary-action" onclick="closeModal('inspectionModal')">Dispatch to Facility BMS</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification System -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script src="/static/public/app.js"></script>
+</body>
+</html>

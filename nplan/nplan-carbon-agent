@@ -1,0 +1,30 @@
+nplan-carbon-agent/
+├── .antigravity/                  # Antigravity agent configs & skills
+│   ├── skills/
+│   │   └── epd_boundary.skill.md
+│   └── config.yaml
+├── backend/                       # Python Agent Core + API
+│   ├── src/
+│   │   ├── agents/                # Quant, Material, Critic agents
+│   │   ├── tools/                 # P6 parser, EPD registry connector
+│   │   └── orchestrator.py        # Antigravity team coordinator
+│   ├── sample_data/               # Mock .xer and BoQ files for demo
+│   │   ├── viaduct_phase1.xer
+│   │   └── boq_materials.xlsx
+│   ├── api.py                     # FastAPI server exposing agent endpoints
+│   ├── requirements.txt
+│   └── Dockerfile
+├── frontend/                      # Interactive Web App (Next.js / React)
+│   ├── src/
+│   │   ├── components/
+│   │   │   ├── AgentTerminal.tsx  # Live multi-agent execution feed
+│   │   │   ├── CarbonGantt.tsx    # Dynamic Scope 3 burn curve
+│   │   │   └── TriageModal.tsx    # Human-in-the-loop review card
+│   │   └── pages/index.tsx
+│   ├── package.json
+│   └── tailwind.config.js
+├── docs/                          # Architecture & Value Engineering diagrams
+│   └── architecture_diagram.png
+├── .gitignore
+├── LICENSE
+└── README.md                      # Executive-ready project presentation

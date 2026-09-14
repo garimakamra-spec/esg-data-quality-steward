@@ -1,13 +1,14 @@
 {
-  "name": "scim-role-adaptive-onboarding",
+  "name": "esg-data-quality-steward-agent",
   "version": "1.0.0",
-  "description": "SCIM-Driven Role-Adaptive Workspace Provisioning and Enterprise Onboarding Engine",
+  "description": "Enterprise ESG Data Quality Steward AI Agent - Autonomous Utility Anomaly Triage, Continuous Audit Defensibility & HITL Review Console",
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
-    "test": "node --loader ts-node/esm --test tests/*.test.ts || npx tsx --test tests/*.test.ts",
-    "test:run": "tsx --test tests/*.test.ts",
-    "start": "tsx src/server.ts"
+    "test": "tsx --test tests/esg-steward-agent.test.ts",
+    "test:all": "tsx --test tests/esg-steward-agent.test.ts",
+    "start": "tsx src/server.ts",
+    "dev": "tsx watch src/server.ts"
   },
   "keywords": [
     "scim",

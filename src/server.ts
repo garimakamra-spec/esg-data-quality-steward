@@ -2,7 +2,7 @@
 import { createApp } from './app.js';
 import { randomUUID } from 'crypto';
 
-const { app, store, seeder } = createApp();
+const { app, store, seeder, esgOrchestrator } = createApp();
 
 // Seed initial default enterprise and sample workspaces for local development
 const enterpriseId = randomUUID();
@@ -67,8 +67,64 @@ store.mappingRules.set(randomUUID(), {
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Enterprise SCIM & Onboarding Server running at http://localhost:${PORT}`);
-  console.log(`Demo Onboarding Banner UI: http://localhost:${PORT}/static/components/onboarding/OnboardingBanner.html`);
-  console.log(`SCIM API Token: ${scimToken}`);
+
+// Seed initial canonical ESG anomaly cases on startup
+async function seedInitialEsgCases() {
+  try {
+    // 1. Canonical Case #2026-8942 (Page 8): Logistics Hub 4 10x Spike (High Stakes HITL)
+    await esgOrchestrator.processAnomalyEvent({
+      event_id: 'case_2026_8942',
+      asset_id: 'GB-LON-LOG-004',
+      meter_id: 'ELEC-MAIN-01',
+      observed_value: 120400.0,
+      interval_start: '2026-08-01',
+      interval_end: '2026-08-31',
+    });
+
+    // 2. Canonical STP Auto-Remediated Case (Page 1): Low Stake 10x multiplier
+    await esgOrchestrator.processAnomalyEvent({
+      event_id: 'stp_2026_1041',
+      asset_id: 'GB-LON-LOG-004',
+      meter_id: 'ELEC-MAIN-01',
+      observed_value: 120500.0,
+      interval_start: '2026-07-01',
+      interval_end: '2026-07-31',
+    });
+
+    // 3. Peak Winter Freeze Gas Read Anomaly (Page 15/16): 0.00 m3 (High Stake 140 tCO2e)
+    await esgOrchestrator.processAnomalyEvent({
+      event_id: 'gas_freeze_9102',
+      asset_id: 'GB-MID-LOG-002',
+      meter_id: 'GAS-MAIN-02',
+      observed_value: 0.0,
+      interval_start: '2026-01-01',
+      interval_end: '2026-01-31',
+    });
+
+    // 4. EU Taxonomy Flagship Asset Anomaly (Page 5/11): Mandatory Human Sign-off
+    await esgOrchestrator.processAnomalyEvent({
+      event_id: 'eu_tax_4401',
+      asset_id: 'DE-FRK-OFF-001',
+      meter_id: 'ELEC-FRK-01',
+      observed_value: 450000.0,
+      interval_start: '2026-08-01',
+      interval_end: '2026-08-31',
+    });
+
+    console.log('✅ Pre-seeded 4 Canonical ESG Anomaly Cases into Multi-Agent Orchestrator');
+  } catch (err) {
+    console.error('Error seeding initial ESG cases:', err);
+  }
+}
+
+const server = app.listen(PORT, async () => {
+  console.log(`\n===============================================================`);
+  console.log(`🌱 ESG Data Quality Steward AI Agent Engine Online`);
+  console.log(`🚀 Exception Review Console: http://localhost:${PORT}/console`);
+  console.log(`🎯 API v2 Endpoints:         http://localhost:${PORT}/api/v2/cases`);
+  console.log(`⛓️ Audit Ledger & CSRD:      http://localhost:${PORT}/api/v2/audit/ledger`);
+  console.log(`===============================================================\n`);
+
+  await seedInitialEsgCases();
 });
+
