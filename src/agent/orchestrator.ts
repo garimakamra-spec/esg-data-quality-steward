@@ -121,6 +121,8 @@ export class MultiAgentOrchestrator {
       evidence_chain: [],
 
       delta_carbon_emissions_tco2e: 0,
+      delta_carbon_emissions_tco2e_location: 0,
+      delta_carbon_emissions_tco2e_market: 0,
       is_high_stakes: false,
       high_stakes_reasons: [],
       requires_human_signoff: false,
